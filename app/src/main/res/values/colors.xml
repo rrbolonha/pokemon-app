@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#24191c</color>
+    <color name="background2">#242316</color>
+
+    <color name="grass_light">#a5d6a7</color>
+    <color name="grass_dark">#1b5e20</color>
+    <color name="grass_surface">#e8f5e9</color>
+    <color name="poison_light">#ce93d8</color>
+    <color name="poison_dark">#4a148c</color>
+    <color name="poison_surface">#f3e5f5</color>
+    <color name="fire_light">#ffab91</color>
+    <color name="fire_dark">#bf360c</color>
+    <color name="fire_surface">#fbe9e7</color>
+    <color name="flying_light">#ef9a9a</color>
+    <color name="flying_dark">#b71c1c</color>
+    <color name="flying_surface">#ffebee</color>
+    <color name="water_light">#90caf9</color>
+    <color name="water_dark">#0d47a1</color>
+    <color name="water_surface">#e3f2fd</color>
+    <color name="bug_light">#80cbc4</color>
+    <color name="bug_dark">#004d40</color>
+    <color name="bug_surface">#e0f2f1</color>
+    <color name="fairy_light">#f48fb1</color>
+    <color name="fairy_dark">#ad1457</color>
+    <color name="fairy_surface">#fce4ec</color>
+    <color name="normal_light">#e0e0e0</color>
+    <color name="normal_dark">#424242</color>
+    <color name="normal_surface">#fafafa</color>
+    <color name="electric_light">#fff59d</color>
+    <color name="electric_dark">#fbc02d</color>
+    <color name="electric_surface">#fffde7</color>
+    <color name="ground_light">#bcaaa4</color>
+    <color name="ground_dark">#3e2723</color>
+    <color name="ground_surface">#efebe9</color>
+    <color name="fighting_light">#ffab91</color>
+    <color name="fighting_dark">#d84315</color>
+    <color name="fighting_surface">#fbe9e7</color>
+    <color name="psychic_light">#ce93d8</color>
+    <color name="psychic_dark">#6a1b9a</color>
+    <color name="psychic_surface">#f3e5f5</color>
+    <color name="rock_light">#e0e0e0</color>
+    <color name="rock_dark">#424242</color>
+    <color name="rock_surface">#fafafa</color>
+    <color name="steel_light">#e0e0e0</color>
+    <color name="steel_dark">#424242</color>
+    <color name="steel_surface">#fafafa</color>
+    <color name="ice_light">#81d4fa</color>
+    <color name="ice_dark">#0277bd</color>
+    <color name="ice_surface">#e3f2fd</color>
+    <color name="ghost_light">#7986cb</color>
+    <color name="ghost_dark">#000000</color>
+    <color name="ghost_surface">#ede7f6</color>
+    <color name="dragon_light">#b0bec5</color>
+    <color name="dragon_dark">#37474f</color>
+    <color name="dragon_surface">#eceff1</color>
+
+    <!--theme colors-->
+    <color name="owl_yellow_200">#ffeb46</color>
+    <color name="owl_yellow_400">#ffc000</color>
+    <color name="owl_yellow_500">#ffde03</color>
+    <color name="owl_yellow_dark_primary">#242316</color>
+
+    <color name="owl_blue_200">#91a4fc</color>
+    <color name="owl_blue_700">#0336ff</color>
+    <color name="owl_blue_800">#0035c9</color>
+    <color name="owl_blue_dark_primary">#1c1d24</color>
+
+    <color name="owl_pink_200">#ff7597</color>
+    <color name="owl_pink_500">#ff0266</color>
+    <color name="owl_pink_600">#d8004d</color>
+    <color name="owl_pink_dark_primary">#24191c</color>
+
+    <!--background protection for nav-bar, varied on Q+-->
+    <color name="immersive_sys_ui">#33000000</color>
+    <color name="nav_bar">@color/immersive_sys_ui</color>
+
+
+
+</resources>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grass_surface"
+    tools:context=".ui.PokemonDetailFragment">
+
+    <TextView
+        android:id="@+id/text_view_code"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:fontFamily="@font/orbitron_medium"
+        android:text="#001"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_view_pokemon"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="@dimen/size_80"
+        android:src="@drawable/bulbasaur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_name"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:fontFamily="@font/orbitron_medium"
+        android:text="Bulbasaur"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_view_pokemon" />
+
+    <TextView
+        android:id="@+id/text_view_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/size_16"
+        android:layout_marginTop="@dimen/size_16"
+        android:fontFamily="@font/orbitron_bold"
+        android:text="TYPE"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_name" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="@dimen/size_0"
+        android:layout_height="@dimen/size_4"
+        android:layout_marginStart="@dimen/size_16"
+        android:background="@color/grass_dark"
+        app:layout_constraintEnd_toEndOf="@id/text_view_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_type" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_type_name_1"
+        android:layout_width="@dimen/size_128"
+        android:layout_height="@dimen/size_64"
+        android:layout_margin="@dimen/size_16"
+        android:clickable="false"
+        android:fontFamily="@font/orbitron_regular"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        tools:text="Type 1"
+        tools:visibility="visible" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_type_name_2"
+        android:layout_width="@dimen/size_128"
+        android:layout_height="@dimen/size_64"
+        android:layout_margin="@dimen/size_16"
+        android:clickable="false"
+        android:fontFamily="@font/orbitron_regular"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/chip_type_name_1"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        tools:text="Type 2"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_name_type_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_16"
+        android:backgroundTint="@color/grass_light"
+        android:gravity="center"
+        android:text="GRASS"
+        android:textColor="@color/grass_dark"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_name_type_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_16"
+        android:backgroundTint="@color/fire_light"
+        android:gravity="center"
+        android:text="FIRE"
+        android:textColor="@color/fire_dark"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/fab_name_type_1"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
