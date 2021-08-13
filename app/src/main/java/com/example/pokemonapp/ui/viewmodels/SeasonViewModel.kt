@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pokemonapp.domain.entities.Season
+import com.example.pokemonapp.domain.entities.SeasonStatusType
+import com.example.pokemonapp.domain.entities.SeasonStatusType.ACTIVATED
+import com.example.pokemonapp.domain.entities.SeasonStatusType.NOT_SELECTED
 import com.example.pokemonapp.domain.usecases.PokemonUseCase
 import com.example.pokemonapp.domain.usecases.SeasonUseCase
 import com.example.pokemonapp.infra.common.ResultWrapper
@@ -27,8 +30,8 @@ class SeasonViewModel(
         MutableLiveData<Boolean>()
     }
 
-    private val seasonsSelected =
-        { status: Int -> seasonList.value!!.filter { it.status == status } }
+    private val seasonsActivated =
+        { status: SeasonStatusType -> seasonList.value!!.filter { it.status == status } }
 
     private val _isDeletedDatabase = MutableLiveData<Boolean>()
     val isDeletedDatabase: LiveData<Boolean> = _isDeletedDatabase
@@ -48,7 +51,7 @@ class SeasonViewModel(
 
     fun pokemons() =
         emit(call = {
-            pokemonUseCase.fetch(seasonsSelected(1))
+            pokemonUseCase.fetch(seasonsActivated(ACTIVATED))
         }) {
             isCompletedFetch.postValue(it)
         }
@@ -57,7 +60,7 @@ class SeasonViewModel(
         when (val step1 = pokemonUseCase.delete()) {
             is ResultWrapper.Success -> {
                 if (step1.data) {
-                    when (val step2 = seasonUseCase.update(seasonsSelected(0))) {
+                    when (val step2 = seasonUseCase.update(seasonsActivated(NOT_SELECTED))) {
                         is ResultWrapper.Success -> {
                             _isDeletedDatabase.postValue(step2.data!!)
                         }

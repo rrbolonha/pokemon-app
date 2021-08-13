@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokemonapp.databinding.ItemSeasonBinding
 import com.example.pokemonapp.domain.entities.Season
+import com.example.pokemonapp.domain.entities.SeasonStatusType.*
 
 class SeasonAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<SeasonViewHolder>() {
 
@@ -38,13 +39,13 @@ class SeasonAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<S
 
     fun handleSeasonEnable(position: Int) {
         val season = seasons[position]
-        if (season.status != 2) {
-            season.status = if (season.status == 0) 1 else 0
+        if (season.status != ACTIVATED) {
+            season.status = if (season.status == NOT_SELECTED) SELECTED else NOT_SELECTED
             notifyItemChanged(position)
         }
     }
 
     fun hasSeasonsSelected(): Boolean =
-        seasons.any { listOf(1, 2).contains(it.status) }
+        seasons.any { listOf(SELECTED, ACTIVATED).contains(it.status) }
 
 }

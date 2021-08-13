@@ -9,7 +9,7 @@ data class Season(
     val title: String,
     val start: Int,
     val end: Int,
-    var status: Int, // 0 - NOT SELECTED, 1 - SELECTED, 2 - ACTIVATED
+    var status: SeasonStatusType,
     var limit: Int = 0,
     var offSet: Int = 0
 ) : Parcelable {

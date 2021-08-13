@@ -7,6 +7,8 @@ import com.example.pokemonapp.data.mappers.PokemonMapper
 import com.example.pokemonapp.data.remotes.PokemonRemoteEntity
 import com.example.pokemonapp.domain.entities.Pokemon
 import com.example.pokemonapp.domain.entities.Season
+import com.example.pokemonapp.domain.entities.SeasonStatusType.ACTIVATED
+import com.example.pokemonapp.domain.entities.SeasonStatusType.NOT_SELECTED
 import com.example.pokemonapp.infra.common.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -45,17 +47,17 @@ class PokemonRepositoryImpl(
 
                             val insertResult = insertPokemons(pokemonLocalEntityList)
                             if (insertResult is ResultWrapper.Success) {
-                                season.status = 2
-                            } else season.status = 0
+                                season.status = ACTIVATED
+                            } else season.status = NOT_SELECTED
                         }
                         is ResultWrapper.Error -> {
-                            season.status = 0
+                            season.status = NOT_SELECTED
                         }
                     }
-                } else season.status = 2
+                } else season.status = ACTIVATED
             }
 
-            if (seasonList.all { it.status == 2 }) ResultWrapper.Success(true)
+            if (seasonList.all { it.status == ACTIVATED }) ResultWrapper.Success(true)
             else ResultWrapper.Error(Exception("Problem to load data"))
         }
 

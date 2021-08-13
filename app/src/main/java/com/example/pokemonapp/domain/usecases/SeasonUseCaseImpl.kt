@@ -2,6 +2,8 @@ package com.example.pokemonapp.domain.usecases
 
 import com.example.pokemonapp.data.repositories.SeasonRepository
 import com.example.pokemonapp.domain.entities.Season
+import com.example.pokemonapp.domain.entities.SeasonStatusType.ACTIVATED
+import com.example.pokemonapp.domain.entities.SeasonStatusType.SELECTED
 import com.example.pokemonapp.infra.common.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +16,18 @@ class SeasonUseCaseImpl(
 
     override suspend fun insert(seasonList: List<Season>): ResultWrapper<Boolean> =
         withContext(dispatcher) {
-            seasonList.filter { it.status == 1 }.forEach { it.status = 2 }
             repository.insert(seasonList)
         }
 
     override suspend fun update(seasonList: List<Season>): ResultWrapper<Boolean> =
-        repository.update(seasonList)
+        withContext(dispatcher) {
+            seasonList.forEach {
+                if (it.status == SELECTED) {
+                    it.status = ACTIVATED
+                }
+            }
+            repository.update(seasonList)
+        }
 
     override suspend fun getAll(): ResultWrapper<List<Season>> =
         withContext(dispatcher) {
@@ -30,7 +38,7 @@ class SeasonUseCaseImpl(
         withContext(dispatcher) {
             when (val result = getAll()) {
                 is ResultWrapper.Success -> {
-                    val seasonsActivated = result.data.filter { it.status == 2 }
+                    val seasonsActivated = result.data.filter { it.status == ACTIVATED }
                     ResultWrapper.Success(seasonsActivated)
                 }
                 is ResultWrapper.Error -> result
