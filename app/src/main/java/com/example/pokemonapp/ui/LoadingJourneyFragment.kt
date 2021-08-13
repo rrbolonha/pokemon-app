@@ -37,10 +37,10 @@ class LoadingJourneyFragment : Fragment() {
 
     private fun subscribeUi() {
         setupErrorObserver(viewModel)
-        setupCompletedFetch()
+        setupIsCompletedFetchObserver()
     }
 
-    private fun setupCompletedFetch() {
+    private fun setupIsCompletedFetchObserver() {
         viewModel.isCompletedFetch.observe(viewLifecycleOwner) {
             Timber.d("completed fetch: $it")
             if (it) onNavigateAction()
@@ -48,8 +48,6 @@ class LoadingJourneyFragment : Fragment() {
         }
     }
 
-    private fun getPokemons() {
-        viewModel.pokemons()
-    }
+    private fun getPokemons() = viewModel.pokemons()
 
 }
