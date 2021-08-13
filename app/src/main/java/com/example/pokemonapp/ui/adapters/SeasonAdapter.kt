@@ -37,14 +37,14 @@ class SeasonAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<S
     }
 
     fun handleSeasonEnable(position: Int) {
-        seasons[position].isActive = seasons[position].isActive.not()
-        notifyItemChanged(position)
+        val season = seasons[position]
+        if (season.status != 2) {
+            season.status = if (season.status == 0) 1 else 0
+            notifyItemChanged(position)
+        }
     }
 
     fun hasSeasonsSelected(): Boolean =
-        seasons.any { it.isActive }
-
-    fun seasonsActivated(): List<Season> =
-        seasons.filter { it.isActive }
+        seasons.any { listOf(1, 2).contains(it.status) }
 
 }

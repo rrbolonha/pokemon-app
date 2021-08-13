@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pokemonapp.databinding.FragmentLoadingJourneyBinding
-import com.example.pokemonapp.infra.common.extensions.setupError
+import com.example.pokemonapp.infra.common.extensions.setupErrorObserver
 import com.example.pokemonapp.infra.common.extensions.showError
 import com.example.pokemonapp.ui.viewmodels.SeasonViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -36,12 +36,12 @@ class LoadingJourneyFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        setupError(viewModel)
+        setupErrorObserver(viewModel)
         setupCompletedFetch()
     }
 
     private fun setupCompletedFetch() {
-        viewModel.completedFetch.observe(viewLifecycleOwner) {
+        viewModel.isCompletedFetch.observe(viewLifecycleOwner) {
             Timber.d("completed fetch: $it")
             if (it) onNavigateAction()
             else showError("Fetch pokemons failed")
@@ -49,7 +49,7 @@ class LoadingJourneyFragment : Fragment() {
     }
 
     private fun getPokemons() {
-        viewModel.getPokemons()
+        viewModel.pokemons()
     }
 
 }

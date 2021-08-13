@@ -3,6 +3,7 @@ package com.example.pokemonapp.data.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.pokemonapp.domain.entities.SeasonStatusType
 
 @Entity(
     tableName = "seasons"
@@ -17,6 +18,6 @@ data class SeasonLocalEntity(
     val start: Int,
     @ColumnInfo(name = "end")
     val end: Int,
-    @ColumnInfo(name = "is_active")
-    val isActive: Boolean
+    @ColumnInfo(name = "status")
+    val status: SeasonStatusType
 )

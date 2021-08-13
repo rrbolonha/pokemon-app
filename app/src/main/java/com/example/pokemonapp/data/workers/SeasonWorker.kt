@@ -13,14 +13,14 @@ class SeasonWorker(private val context: Context, params: WorkerParameters) :
         try {
             val database = AppDatabase.getInstance(context)
             val seasonList = listOf(
-                SeasonLocalEntity(1, "Season One", 1, 151, false),
-                SeasonLocalEntity(2, "Season Two", 152, 251, false),
-                SeasonLocalEntity(3, "Season Three", 252, 386, false),
-                SeasonLocalEntity(4, "Season Four", 387, 493, false),
-                SeasonLocalEntity(5, "Season Five", 494, 649, false),
-                SeasonLocalEntity(6, "Season Six", 650, 721, false),
-                SeasonLocalEntity(7, "Season Seven", 722, 809, false),
-                SeasonLocalEntity(7, "Season Eight", 810, 898, false),
+                SeasonLocalEntity(1, "Season One", 1, 151, 0),
+                SeasonLocalEntity(2, "Season Two", 152, 251, 0),
+                SeasonLocalEntity(3, "Season Three", 252, 386, 0),
+                SeasonLocalEntity(4, "Season Four", 387, 494, 0),
+                SeasonLocalEntity(5, "Season Five", 495, 649, 0),
+                SeasonLocalEntity(6, "Season Six", 650, 721, 0),
+                SeasonLocalEntity(7, "Season Seven", 722, 809, 0),
+                SeasonLocalEntity(7, "Season Eight", 810, 898, 0 ),
             )
             database.seasonDao().insert(seasonList)
 

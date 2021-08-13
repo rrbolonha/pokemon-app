@@ -12,11 +12,11 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pokemonList: List<PokemonLocalEntity>)
 
-    @Query("SELECT * FROM pokemons")
+    @Query("SELECT * FROM pokemons ORDER BY id")
     suspend fun getAll(): List<PokemonLocalEntity>
 
-    @Query("SELECT EXISTS(SELECT 1 FROM pokemons)")
-    suspend fun hasData(): Boolean
+    @Query("SELECT EXISTS(SELECT 1 FROM pokemons WHERE id = :id)")
+    suspend fun hasData(id: Int): Boolean
 
     @Query("SELECT * FROM pokemons WHERE id = :id")
     suspend fun getById(id: Int): PokemonLocalEntity

@@ -15,43 +15,49 @@ class SeasonViewModel(
     private val pokemonUseCase: PokemonUseCase
 ) : BaseViewModel() {
 
-    private val _seasonList = MutableLiveData<List<Season>>()
-    val seasonList: LiveData<List<Season>> = _seasonList
+    val seasonList: MutableLiveData<List<Season>> by lazy {
+        MutableLiveData<List<Season>>()
+    }
 
-    private val _updatedSeasons = MutableLiveData<Boolean>()
-    val updatedSeasons: LiveData<Boolean> = _updatedSeasons
+    val isUpdatedSeasons: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
 
-    private val _completedFetch = MutableLiveData<Boolean>()
-    val completedFetch: LiveData<Boolean> = _completedFetch
+    val isCompletedFetch: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    private val seasonsSelected =
+        { status: Int -> seasonList.value!!.filter { it.status == status } }
 
     private val _isDeletedDatabase = MutableLiveData<Boolean>()
     val isDeletedDatabase: LiveData<Boolean> = _isDeletedDatabase
 
     fun seasons() =
-        emit(call = { seasonUseCase.getAll() }, onError = { updateRetry("Not found seasons") }) {
-            _seasonList.postValue(it)
+        emit(call = { seasonUseCase.getAll() },
+            onError = { updateRetry("Not found seasons") }) {
+            seasonList.postValue(it)
         }
 
     fun updateSeasons() =
         emit(call = {
-            seasonUseCase.update(_seasonList.value ?: emptyList())
+            seasonUseCase.update(seasonList.value!!)
         }) {
-            _updatedSeasons.postValue(it)
+            isUpdatedSeasons.postValue(it)
         }
 
-    fun getPokemons() =
+    fun pokemons() =
         emit(call = {
-            pokemonUseCase.fetch(_seasonList.value?.filter { it.isActive } ?: emptyList())
+            pokemonUseCase.fetch(seasonsSelected(1))
         }) {
-            _completedFetch.postValue(it)
+            isCompletedFetch.postValue(it)
         }
 
     fun deleteDatabase() = viewModelScope.launch {
         when (val step1 = pokemonUseCase.delete()) {
             is ResultWrapper.Success -> {
                 if (step1.data) {
-                    val seasons = _seasonList.value?.onEach { it.isActive = false } ?: emptyList()
-                    when (val step2 = seasonUseCase.update(seasons)) {
+                    when (val step2 = seasonUseCase.update(seasonsSelected(0))) {
                         is ResultWrapper.Success -> {
                             _isDeletedDatabase.postValue(step2.data!!)
                         }
@@ -62,8 +68,5 @@ class SeasonViewModel(
             is ResultWrapper.Error -> updateError("Can't delete pokemons")
         }
     }
-
-    // adicionar a regra aqui
-    //fun hasSeasonsSelected()
 
 }

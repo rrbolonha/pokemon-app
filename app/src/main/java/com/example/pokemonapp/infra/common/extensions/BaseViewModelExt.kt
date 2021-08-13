@@ -10,9 +10,14 @@ fun <T> BaseViewModel.emit(
     onError: (suspend (ResultWrapper.Error) -> Unit)? = null,
     onSuccess: suspend (T) -> Unit
 ) = viewModelScope.launch {
+    handleLoading(true)
     when (val data = call()) {
-        is ResultWrapper.Success -> onSuccess(data.data)
+        is ResultWrapper.Success -> {
+            onSuccess(data.data)
+            handleLoading(false)
+        }
         is ResultWrapper.Error -> {
+            handleLoading(false)
             onError?.let { it(data) } ?: updateError(data.exception.message!!)
         }
     }

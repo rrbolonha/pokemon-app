@@ -1,5 +1,6 @@
 package com.example.pokemonapp.infra.common.extensions
 
+import com.example.pokemonapp.data.database.BaseDataSource
 import com.example.pokemonapp.data.database.PokemonLocalDataSourceImpl
 import com.example.pokemonapp.data.exceptions.GenericException
 import com.example.pokemonapp.infra.common.ResultWrapper
@@ -8,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-suspend fun <T> PokemonLocalDataSourceImpl.emit(
+suspend fun <T> BaseDataSource.emit(
     exception: GenericException? = null,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
     call: suspend () -> T
@@ -22,7 +23,7 @@ suspend fun <T> PokemonLocalDataSourceImpl.emit(
     }
 }
 
-suspend fun <T, U> PokemonLocalDataSourceImpl.emit(
+suspend fun <T, U> BaseDataSource.emit(
     call: suspend () -> T,
     exception: GenericException? = null,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,

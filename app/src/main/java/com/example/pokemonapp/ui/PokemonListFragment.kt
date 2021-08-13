@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.pokemonapp.databinding.FragmentPokemonListBinding
-import com.example.pokemonapp.infra.common.extensions.setupError
-import com.example.pokemonapp.infra.common.extensions.setupLoader
+import com.example.pokemonapp.infra.common.extensions.setupErrorObserver
+import com.example.pokemonapp.infra.common.extensions.setupLoaderObserver
 import com.example.pokemonapp.infra.common.extensions.toVisibility
 import com.example.pokemonapp.ui.adapters.PokemonAdapter
 import com.example.pokemonapp.ui.viewmodels.PokemonViewModel
@@ -41,8 +41,8 @@ class PokemonListFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        setupError(viewModel)
-        setupLoader(viewModel) {
+        setupErrorObserver(viewModel)
+        setupLoaderObserver(viewModel) {
             binding.progressBar.visibility = it.toVisibility()
         }
         setupPokemonObserver()
@@ -50,7 +50,7 @@ class PokemonListFragment : Fragment() {
 
     private fun setupPokemonObserver() {
         viewModel.pokemonList.observe(viewLifecycleOwner) {
-            binding.recyclerViewPokemon.visibility = View.VISIBLE
+            binding.recyclerViewPokemon.visibility = it.isNotEmpty().toVisibility()
             adapter.submit(it)
         }
     }

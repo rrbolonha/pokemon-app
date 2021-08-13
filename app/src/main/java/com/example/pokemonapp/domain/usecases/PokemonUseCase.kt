@@ -4,9 +4,9 @@ import com.example.pokemonapp.domain.entities.Pokemon
 import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
 
-interface PokemonUseCase {
+interface PokemonUseCase : BaseUseCase {
 
-    suspend fun getAll(limit: Int): ResultWrapper<List<Pokemon>>
+    suspend fun getAll(): ResultWrapper<List<Pokemon>>
 
     suspend fun fetch(seasonList: List<Season>): ResultWrapper<Boolean>
 

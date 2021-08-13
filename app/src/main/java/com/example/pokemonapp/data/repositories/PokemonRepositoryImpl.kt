@@ -18,42 +18,52 @@ class PokemonRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PokemonRepository {
 
-    override suspend fun getAll(limit: Int, offSet: Int): ResultWrapper<List<Pokemon>> =
+    override suspend fun getAll(): ResultWrapper<List<Pokemon>> =
         withContext(dispatcher) {
-            getLocalPokemons()
+            when (val result = localDataSource.getAllPokemons()) {
+                is ResultWrapper.Success -> {
+                    try {
+                        ResultWrapper.Success(result.data)
+                    } catch (e: Exception) {
+                        ResultWrapper.Success(emptyList())
+                    }
+                }
+                is ResultWrapper.Error -> result
+            }
         }
 
     override suspend fun fetch(seasonList: List<Season>): ResultWrapper<Boolean> =
         withContext(dispatcher) {
-            val hasData = (localDataSource.hasData() as ResultWrapper.Success).data
-            if (hasData.not()) {
-                // TODO: 7/13/2021 changed logic to take all limit
-                val limit = seasonList.last().end
-                when (val result = getRemotePokemons(limit)) {
-                    is ResultWrapper.Success -> {
-                        val insertResult =
-                            insertPokemons(PokemonMapper.fromRemoteToLocal(result.data))
-                        if (insertResult is ResultWrapper.Success) ResultWrapper.Success(true)
-                        else ResultWrapper.Error(Exception("Problem to insert pokemons"))
+            seasonList.forEach { season ->
+                val hasLocalData =
+                    (localDataSource.hasData(season.start) as ResultWrapper.Success).data
+                if (hasLocalData.not()) {
+                    when (val result = getRemotePokemons(season)) {
+                        is ResultWrapper.Success -> {
+                            val pokemonLocalEntityList =
+                                PokemonMapper.fromRemoteToLocal(result.data)
+
+                            val insertResult = insertPokemons(pokemonLocalEntityList)
+                            if (insertResult is ResultWrapper.Success) {
+                                season.status = 2
+                            } else season.status = 0
+                        }
+                        is ResultWrapper.Error -> {
+                            season.status = 0
+                        }
                     }
-                    is ResultWrapper.Error -> result
-                }
-            } else ResultWrapper.Success(true)
-        }
-
-    override suspend fun getById(id: Int): ResultWrapper<Pokemon> = withContext(dispatcher) {
-        when (val result = localDataSource.getPokemonById(id)) {
-            is ResultWrapper.Success -> {
-                val mapper = PokemonMapper.fromLocalToDomain(result.data)
-                ResultWrapper.Success(mapper)
+                } else season.status = 2
             }
-            is ResultWrapper.Error -> result
-        }
-    }
 
-    override suspend fun delete(): ResultWrapper<Boolean> = withContext(dispatcher) {
+            if (seasonList.all { it.status == 2 }) ResultWrapper.Success(true)
+            else ResultWrapper.Error(Exception("Problem to load data"))
+        }
+
+    override suspend fun getById(id: Int): ResultWrapper<Pokemon> =
+        localDataSource.getPokemonById(id)
+
+    override suspend fun delete(): ResultWrapper<Boolean> =
         localDataSource.deletePokemons()
-    }
 
     private suspend fun getRemotePokemon(code: String): ResultWrapper<PokemonRemoteEntity> =
         withContext(dispatcher) {
@@ -67,10 +77,12 @@ class PokemonRepositoryImpl(
             }
         }
 
-    private suspend fun getRemotePokemons(limit: Int): ResultWrapper<List<PokemonRemoteEntity>> =
+    private suspend fun getRemotePokemons(
+        season: Season
+    ): ResultWrapper<List<PokemonRemoteEntity>> =
         withContext(dispatcher) {
-            val pokemonList = arrayListOf<PokemonRemoteEntity>()
-            for (current in 1..limit) {
+            val pokemonList = mutableListOf<PokemonRemoteEntity>()
+            for (current in season.start..season.end) {
                 when (val result = getRemotePokemon(current.toString())) {
                     is ResultWrapper.Success -> pokemonList.add(result.data)
                     is ResultWrapper.Error -> ResultWrapper.Error(Exception("Not found pokemon $current"))
@@ -78,20 +90,6 @@ class PokemonRepositoryImpl(
             }
             ResultWrapper.Success(pokemonList)
         }
-
-    private suspend fun getLocalPokemons() = withContext(dispatcher) {
-        when (val result = localDataSource.getAllPokemons()) {
-            is ResultWrapper.Success -> {
-                try {
-                    val mapper = PokemonMapper.fromLocalToDomain(result.data)
-                    ResultWrapper.Success(mapper)
-                } catch (e: Exception) {
-                    ResultWrapper.Success(emptyList())
-                }
-            }
-            is ResultWrapper.Error -> result
-        }
-    }
 
     private suspend fun insertPokemons(pokemonLocalEntityList: List<PokemonLocalEntity>) =
         withContext(dispatcher) {

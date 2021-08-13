@@ -4,6 +4,10 @@ import com.example.pokemonapp.data.dao.PokemonDao
 import com.example.pokemonapp.data.dao.SeasonDao
 import com.example.pokemonapp.data.entities.PokemonLocalEntity
 import com.example.pokemonapp.data.entities.SeasonLocalEntity
+import com.example.pokemonapp.data.mappers.PokemonMapper
+import com.example.pokemonapp.data.mappers.SeasonMapper
+import com.example.pokemonapp.domain.entities.Pokemon
+import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
 import com.example.pokemonapp.infra.common.extensions.emit
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,16 +19,22 @@ class PokemonLocalDataSourceImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : PokemonLocalDataSource {
 
-    override suspend fun getAllPokemons(): ResultWrapper<List<PokemonLocalEntity>> =
-        emit { pokemonDao.getAll() }
+    override suspend fun getAllPokemons(): ResultWrapper<List<Pokemon>> =
+        emit(call = { pokemonDao.getAll() }) {
+            PokemonMapper.fromLocalToDomain(it)
+        }
 
-    override suspend fun getPokemonById(id: Int): ResultWrapper<PokemonLocalEntity> =
-        emit { pokemonDao.getById(id) }
+    override suspend fun getPokemonById(id: Int): ResultWrapper<Pokemon> =
+        emit(call = { pokemonDao.getById(id) }) {
+            PokemonMapper.fromLocalToDomain(it)
+        }
 
-    override suspend fun hasData(): ResultWrapper<Boolean> =
-        emit { pokemonDao.hasData() }
+    override suspend fun hasData(id: Int): ResultWrapper<Boolean> =
+        emit { pokemonDao.hasData(id) }
 
-    override suspend fun insertPokemons(pokemonLocalEntityList: List<PokemonLocalEntity>): ResultWrapper<Boolean> =
+    override suspend fun insertPokemons(
+        pokemonLocalEntityList: List<PokemonLocalEntity>
+    ): ResultWrapper<Boolean> =
         emit(call = { pokemonDao.insert(pokemonLocalEntityList) }) {
             true
         }
@@ -39,15 +49,16 @@ class PokemonLocalDataSourceImpl(
             true
         }
 
-    override suspend fun updateSeasons(seasonLocalEntityList: List<SeasonLocalEntity>): ResultWrapper<Boolean> =
+    override suspend fun updateSeasons(
+        seasonLocalEntityList: List<SeasonLocalEntity>
+    ): ResultWrapper<Boolean> =
         emit(call = { seasonDao.update(seasonLocalEntityList) }) {
             true
         }
 
-    override suspend fun getAllSeasons(): ResultWrapper<List<SeasonLocalEntity>> =
-        emit { seasonDao.getAll() }
-
-    override suspend fun getActiveSeasons(): ResultWrapper<List<SeasonLocalEntity>> =
-        emit { seasonDao.getActiveSeasons(true) }
+    override suspend fun getAllSeasons(): ResultWrapper<List<Season>> =
+        emit(call = { seasonDao.getAll() }) {
+            SeasonMapper.fromLocalToDomain(it)
+        }
 
 }

@@ -1,6 +1,5 @@
 package com.example.pokemonapp.ui.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.pokemonapp.domain.entities.Pokemon
 import com.example.pokemonapp.domain.entities.Season
@@ -13,29 +12,32 @@ class PokemonViewModel(
     private val seasonUseCase: SeasonUseCase
 ) : BaseViewModel() {
 
-    private val _pokemonList = MutableLiveData<List<Pokemon>>()
-    val pokemonList: LiveData<List<Pokemon>> = _pokemonList
+    val pokemonList: MutableLiveData<List<Pokemon>> by lazy {
+        MutableLiveData<List<Pokemon>>()
+    }
 
-    private val _pokemon = MutableLiveData<Pokemon>()
-    val pokemon: LiveData<Pokemon> = _pokemon
+    val pokemon: MutableLiveData<Pokemon> by lazy {
+        MutableLiveData<Pokemon>()
+    }
 
-    private val _seasonList = MutableLiveData<List<Season>>()
-    val seasonList: LiveData<List<Season>> = _seasonList
+    val seasonList: MutableLiveData<List<Season>> by lazy {
+        MutableLiveData<List<Season>>()
+    }
 
     fun pokemons() =
-        emit(call = { pokemonUseCase.getAll(151) }) {
-            _pokemonList.postValue(it)
+        emit(call = { pokemonUseCase.getAll() }) {
+            pokemonList.postValue(it)
             handleLoading(false)
         }
 
     fun seasons() =
         emit(call = { seasonUseCase.getActiveSeasons() }) {
-            _seasonList.postValue(it)
+            seasonList.postValue(it)
         }
 
     fun pokemon(id: Int) =
         emit(call = { pokemonUseCase.getById(id) }) {
-            _pokemon.postValue(it)
+            pokemon.postValue(it)
         }
 
 }

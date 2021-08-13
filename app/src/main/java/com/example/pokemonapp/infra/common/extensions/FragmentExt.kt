@@ -16,7 +16,7 @@ fun Fragment.showError(message: String) {
     builder.show()
 }
 
-fun Fragment.showRetry(message: String, onRetry: () -> Unit) {
+fun Fragment.showRetry(message: String, onRetry: () -> Unit = {}) {
     val builder = AlertDialog.Builder(requireContext())
     builder.setMessage(message)
         .setPositiveButton("Retry") { _, _ ->
@@ -29,7 +29,7 @@ fun Fragment.showRetry(message: String, onRetry: () -> Unit) {
     builder.show()
 }
 
-fun Fragment.setupError(viewModel: BaseViewModel) {
+fun Fragment.setupErrorObserver(viewModel: BaseViewModel) {
     viewModel.error.observe(viewLifecycleOwner) {
         showError(it)
     }
@@ -41,7 +41,7 @@ fun Fragment.setupRetry(viewModel: BaseViewModel, onRetry: () -> Unit) {
     }
 }
 
-fun Fragment.setupLoader(viewModel: BaseViewModel, action: (isLoading: Boolean) -> Unit) {
+fun Fragment.setupLoaderObserver(viewModel: BaseViewModel, action: (isLoading: Boolean) -> Unit) {
     viewModel.isLoading.observe(viewLifecycleOwner) {
         action(it)
     }

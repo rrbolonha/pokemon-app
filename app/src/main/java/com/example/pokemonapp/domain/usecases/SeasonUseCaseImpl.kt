@@ -1,6 +1,5 @@
 package com.example.pokemonapp.domain.usecases
 
-import com.example.pokemonapp.data.mappers.SeasonMapper
 import com.example.pokemonapp.data.repositories.SeasonRepository
 import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
@@ -15,32 +14,24 @@ class SeasonUseCaseImpl(
 
     override suspend fun insert(seasonList: List<Season>): ResultWrapper<Boolean> =
         withContext(dispatcher) {
+            seasonList.filter { it.status == 1 }.forEach { it.status = 2 }
             repository.insert(seasonList)
         }
 
     override suspend fun update(seasonList: List<Season>): ResultWrapper<Boolean> =
-        withContext(dispatcher) {
-            repository.update(seasonList)
-        }
+        repository.update(seasonList)
 
     override suspend fun getAll(): ResultWrapper<List<Season>> =
         withContext(dispatcher) {
-            when (val result = repository.getAll()) {
-                is ResultWrapper.Success -> {
-                    val mapper = SeasonMapper.fromLocalToDomain(result.data)
-                    ResultWrapper.Success(mapper)
-                }
-                is ResultWrapper.Error -> result
-            }
+            repository.getAll()
         }
 
     override suspend fun getActiveSeasons(): ResultWrapper<List<Season>> =
         withContext(dispatcher) {
-            when (val result = repository.getAll()) {
+            when (val result = getAll()) {
                 is ResultWrapper.Success -> {
-                    val mapper = SeasonMapper.fromLocalToDomain(result.data)
-                    val filtered = mapper.filter { it.isActive }
-                    ResultWrapper.Success(filtered)
+                    val seasonsActivated = result.data.filter { it.status == 2 }
+                    ResultWrapper.Success(seasonsActivated)
                 }
                 is ResultWrapper.Error -> result
             }

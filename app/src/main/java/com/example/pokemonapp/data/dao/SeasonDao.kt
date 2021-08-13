@@ -15,7 +15,4 @@ interface SeasonDao {
     @Query("SELECT * FROM seasons")
     suspend fun getAll(): List<SeasonLocalEntity>
 
-    @Query("SELECT * FROM seasons WHERE is_active = :isActive")
-    suspend fun getActiveSeasons(isActive: Boolean): List<SeasonLocalEntity>
-
 }

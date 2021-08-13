@@ -13,23 +13,18 @@ class PokemonUseCaseImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : PokemonUseCase {
 
-    override suspend fun getAll(limit: Int): ResultWrapper<List<Pokemon>> =
-        withContext(dispatcher) {
-            repository.getAll(limit, 0)
-        }
+    override suspend fun getAll(): ResultWrapper<List<Pokemon>> =
+        repository.getAll()
 
     override suspend fun fetch(seasonList: List<Season>): ResultWrapper<Boolean> =
-        withContext(dispatcher) {
-            repository.fetch(seasonList)
-        }
+        repository.fetch(seasonList)
 
     override suspend fun getById(id: Int): ResultWrapper<Pokemon> =
-        withContext(dispatcher) {
-            repository.getById(id)
-        }
+        repository.getById(id)
 
-    override suspend fun delete(): ResultWrapper<Boolean> = withContext(dispatcher) {
-        repository.delete()
-    }
+    override suspend fun delete(): ResultWrapper<Boolean> =
+        withContext(dispatcher) {
+            repository.delete()
+        }
 
 }

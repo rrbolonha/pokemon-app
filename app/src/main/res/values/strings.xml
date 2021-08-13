@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Pokemon App</string>
+    <string name="start">Start</string>
+    <string name="restart">Restart</string>
+    <string name="pokemon">Pokemon</string>
+    <string name="lets_start_your_journey">Let\'s start\nyour journey.</string>
+    <string name="type">Type</string>
 </resources>

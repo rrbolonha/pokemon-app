@@ -2,15 +2,17 @@ package com.example.pokemonapp.data.database
 
 import com.example.pokemonapp.data.entities.PokemonLocalEntity
 import com.example.pokemonapp.data.entities.SeasonLocalEntity
+import com.example.pokemonapp.domain.entities.Pokemon
+import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
 
-interface PokemonLocalDataSource {
+interface PokemonLocalDataSource : BaseDataSource {
 
-    suspend fun getAllPokemons(): ResultWrapper<List<PokemonLocalEntity>>
+    suspend fun getAllPokemons(): ResultWrapper<List<Pokemon>>
 
-    suspend fun getPokemonById(id: Int): ResultWrapper<PokemonLocalEntity>
+    suspend fun getPokemonById(id: Int): ResultWrapper<Pokemon>
 
-    suspend fun hasData(): ResultWrapper<Boolean>
+    suspend fun hasData(id: Int): ResultWrapper<Boolean>
 
     suspend fun insertPokemons(
         pokemonLocalEntityList: List<PokemonLocalEntity>
@@ -22,9 +24,6 @@ interface PokemonLocalDataSource {
 
     suspend fun updateSeasons(seasonLocalEntityList: List<SeasonLocalEntity>): ResultWrapper<Boolean>
 
-    suspend fun getAllSeasons(): ResultWrapper<List<SeasonLocalEntity>>
-
-    suspend fun getActiveSeasons(): ResultWrapper<List<SeasonLocalEntity>>
-
+    suspend fun getAllSeasons(): ResultWrapper<List<Season>>
 
 }

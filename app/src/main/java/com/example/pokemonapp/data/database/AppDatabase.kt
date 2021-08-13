@@ -21,6 +21,9 @@ const val DATABASE_NAME = "pokemons-db.db"
     version = 1,
     exportSchema = false
 )
+//@TypeConverters(
+//    DateConverter::class,
+//)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun pokemonDao(): PokemonDao

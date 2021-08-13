@@ -33,17 +33,15 @@ class PokemonDetailFragment : Fragment() {
         getPokemon()
     }
 
-    private fun getPokemon() {
-        viewModel.pokemon(args.id)
-    }
+    private fun getPokemon() = viewModel.pokemon(args.id)
 
     private fun subscribeUi() {
         viewModel.pokemon.observe(viewLifecycleOwner) {
-            setupPokemon(it)
+            fillPokemon(it)
         }
     }
 
-    private fun setupPokemon(pokemon: Pokemon) {
+    private fun fillPokemon(pokemon: Pokemon) {
         val pokemonType: PokemonType = try {
             PokemonType.valueOf(pokemon.typeName1!!.uppercase())
         } catch (e: Exception) {
@@ -53,8 +51,6 @@ class PokemonDetailFragment : Fragment() {
         binding.imageViewPokemon.load(pokemon.officialPath)
         binding.textViewCode.text = "#${pokemon.id}"
         binding.textViewName.text = pokemon.name.uppercaseFirst()
-        binding.fabNameType1.text = pokemon.typeName1
-        binding.fabNameType2.text = pokemon.typeName2
         handleTypeName(binding.chipTypeName1, pokemon.typeName1)
         handleTypeName(binding.chipTypeName2, pokemon.typeName2)
     }

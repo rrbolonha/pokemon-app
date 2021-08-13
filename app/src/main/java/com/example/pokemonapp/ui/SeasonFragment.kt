@@ -9,9 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.pokemonapp.R
 import com.example.pokemonapp.databinding.FragmentSeasonBinding
 import com.example.pokemonapp.infra.common.OscillatingScrollListener
-import com.example.pokemonapp.infra.common.extensions.setupError
-import com.example.pokemonapp.infra.common.extensions.showError
-import com.example.pokemonapp.infra.common.extensions.showRetry
+import com.example.pokemonapp.infra.common.extensions.*
 import com.example.pokemonapp.ui.adapters.SeasonAdapter
 import com.example.pokemonapp.ui.viewmodels.SeasonViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -64,36 +62,35 @@ class SeasonFragment : Fragment() {
     }
 
     private fun subscribeUi() {
-        setupError(viewModel)
+        setupErrorObserver(viewModel)
+        setupLoaderObserver(viewModel) {
+            binding.progressBar.visibility = it.toVisibility()
+        }
         setupSeasonListObserver()
         setupUpdatedSeasonsObserver()
         setupDeleteDatabaseObserver()
     }
 
-    private fun setupSeasonListObserver() {
+    private fun setupSeasonListObserver() =
         viewModel.seasonList.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {adapter.submit(it)}
+            if (it.isNotEmpty()) adapter.submit(it)
             else showRetry("Not found seasons") {
-                Timber.d("try again")
                 getSeasons()
             }
         }
-    }
 
-    private fun setupUpdatedSeasonsObserver() {
-        viewModel.updatedSeasons.observe(viewLifecycleOwner) {
+    private fun setupUpdatedSeasonsObserver() =
+        viewModel.isUpdatedSeasons.observe(viewLifecycleOwner) {
             Timber.d("updated seasons are $it")
             if (it) onNavigateAction()
             else showError("Not seasons selected")
         }
-    }
 
-    private fun setupDeleteDatabaseObserver() {
+    private fun setupDeleteDatabaseObserver() =
         viewModel.isDeletedDatabase.observe(viewLifecycleOwner) {
-            Timber.d("deleted databse is $it")
+            Timber.d("deleted database is $it")
             getSeasons()
         }
-    }
 
     private fun getSeasons() {
         Timber.d("get seasons")

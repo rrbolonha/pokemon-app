@@ -6,7 +6,7 @@ import com.example.pokemonapp.infra.common.ResultWrapper
 
 interface PokemonRepository {
 
-    suspend fun getAll(limit: Int, offSet: Int): ResultWrapper<List<Pokemon>>
+    suspend fun getAll(): ResultWrapper<List<Pokemon>>
 
     suspend fun fetch(seasonList: List<Season>): ResultWrapper<Boolean>
 

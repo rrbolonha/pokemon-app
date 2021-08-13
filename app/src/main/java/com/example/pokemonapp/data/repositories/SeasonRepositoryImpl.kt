@@ -1,7 +1,6 @@
 package com.example.pokemonapp.data.repositories
 
 import com.example.pokemonapp.data.database.PokemonLocalDataSource
-import com.example.pokemonapp.data.entities.SeasonLocalEntity
 import com.example.pokemonapp.data.mappers.SeasonMapper
 import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
@@ -26,7 +25,7 @@ class SeasonRepositoryImpl(
             localDataSource.updateSeasons(mapper)
         }
 
-    override suspend fun getAll(): ResultWrapper<List<SeasonLocalEntity>> =
+    override suspend fun getAll(): ResultWrapper<List<Season>> =
         withContext(dispatcher) {
             localDataSource.getAllSeasons()
         }

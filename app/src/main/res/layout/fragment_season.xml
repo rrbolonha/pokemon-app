@@ -7,6 +7,15 @@
     android:background="@color/background"
     tools:context=".ui.SeasonFragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_horizontal"
         android:layout_width="wrap_content"
@@ -22,7 +31,7 @@
         android:layout_marginTop="@dimen/size_16"
         android:layout_marginEnd="@dimen/size_32"
         android:fontFamily="@font/orbitron_medium"
-        android:text="Pokemon"
+        android:text="@string/pokemon"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +45,7 @@
         android:alpha="0.9"
         android:fontFamily="@font/orbitron_regular"
         android:gravity="end"
-        android:text="Let's start\nyour journey."
+        android:text="@string/lets_start_your_journey"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +79,7 @@
         android:backgroundTint="@color/electric_dark"
         android:fontFamily="@font/orbitron_medium"
         android:gravity="center"
-        android:text="RESTART"
+        android:text="@string/restart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -81,7 +90,7 @@
         android:layout_margin="@dimen/size_16"
         android:fontFamily="@font/orbitron_medium"
         android:gravity="center"
-        android:text="START"
+        android:text="@string/start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
