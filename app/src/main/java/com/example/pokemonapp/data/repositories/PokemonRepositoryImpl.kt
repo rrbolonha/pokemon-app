@@ -2,7 +2,6 @@ package com.example.pokemonapp.data.repositories
 
 import com.example.pokemonapp.data.database.PokemonLocalDataSource
 import com.example.pokemonapp.data.database.PokemonRemoteDataSource
-import com.example.pokemonapp.data.entities.PokemonLocalEntity
 import com.example.pokemonapp.data.mappers.PokemonMapper
 import com.example.pokemonapp.data.remotes.PokemonRemoteEntity
 import com.example.pokemonapp.domain.entities.Pokemon
@@ -21,44 +20,25 @@ class PokemonRepositoryImpl(
 ) : PokemonRepository {
 
     override suspend fun getAll(): ResultWrapper<List<Pokemon>> =
-        withContext(dispatcher) {
-            when (val result = localDataSource.getAllPokemons()) {
-                is ResultWrapper.Success -> {
-                    try {
-                        ResultWrapper.Success(result.data)
-                    } catch (e: Exception) {
-                        ResultWrapper.Success(emptyList())
-                    }
-                }
-                is ResultWrapper.Error -> result
-            }
-        }
+        localDataSource.getAllPokemons()
 
     override suspend fun fetch(seasonList: List<Season>): ResultWrapper<Boolean> =
         withContext(dispatcher) {
             seasonList.forEach { season ->
-                val hasLocalData =
-                    (localDataSource.hasData(season.start) as ResultWrapper.Success).data
-                if (hasLocalData.not()) {
-                    when (val result = getRemotePokemons(season)) {
-                        is ResultWrapper.Success -> {
-                            val pokemonLocalEntityList =
-                                PokemonMapper.fromRemoteToLocal(result.data)
-
-                            val insertResult = insertPokemons(pokemonLocalEntityList)
-                            if (insertResult is ResultWrapper.Success) {
-                                season.status = ACTIVATED
-                            } else season.status = NOT_SELECTED
-                        }
-                        is ResultWrapper.Error -> {
-                            season.status = NOT_SELECTED
-                        }
+                when (val result = getRemotePokemons(season)) {
+                    is ResultWrapper.Success -> {
+                        val isInserted = insertPokemons(result.data)
+                        if (isInserted is ResultWrapper.Success) {
+                            season.status = ACTIVATED
+                        } else season.status = NOT_SELECTED
                     }
-                } else season.status = ACTIVATED
+                    is ResultWrapper.Error -> season.status = NOT_SELECTED
+                }
             }
 
-            if (seasonList.all { it.status == ACTIVATED }) ResultWrapper.Success(true)
-            else ResultWrapper.Error(Exception("Problem to load data"))
+            if (seasonList.all { it.status == ACTIVATED }) {
+                localDataSource.updateSeasons(seasonList)
+            } else ResultWrapper.Error(Exception("Problem to load data"))
         }
 
     override suspend fun getById(id: Int): ResultWrapper<Pokemon> =
@@ -93,8 +73,9 @@ class PokemonRepositoryImpl(
             ResultWrapper.Success(pokemonList)
         }
 
-    private suspend fun insertPokemons(pokemonLocalEntityList: List<PokemonLocalEntity>) =
+    private suspend fun insertPokemons(pokemonRemoteEntityList: List<PokemonRemoteEntity>) =
         withContext(dispatcher) {
+            val pokemonLocalEntityList = PokemonMapper.fromRemoteToLocal(pokemonRemoteEntityList)
             localDataSource.insertPokemons(pokemonLocalEntityList)
         }
 

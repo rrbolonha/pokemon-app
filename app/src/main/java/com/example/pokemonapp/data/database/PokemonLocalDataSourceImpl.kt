@@ -3,7 +3,6 @@ package com.example.pokemonapp.data.database
 import com.example.pokemonapp.data.dao.PokemonDao
 import com.example.pokemonapp.data.dao.SeasonDao
 import com.example.pokemonapp.data.entities.PokemonLocalEntity
-import com.example.pokemonapp.data.entities.SeasonLocalEntity
 import com.example.pokemonapp.data.mappers.PokemonMapper
 import com.example.pokemonapp.data.mappers.SeasonMapper
 import com.example.pokemonapp.domain.entities.Pokemon
@@ -44,15 +43,21 @@ class PokemonLocalDataSourceImpl(
             true
         }
 
-    override suspend fun insertSeasons(seasonList: List<SeasonLocalEntity>): ResultWrapper<Boolean> =
-        emit(call = { seasonDao.insert(seasonList) }) {
+    override suspend fun insertSeasons(seasonList: List<Season>): ResultWrapper<Boolean> =
+        emit(call = {
+            val seasonLocalEntityList = SeasonMapper.fromDomainToLocal(seasonList)
+            seasonDao.insert(seasonLocalEntityList)
+        }) {
             true
         }
 
     override suspend fun updateSeasons(
-        seasonLocalEntityList: List<SeasonLocalEntity>
+        seasonList: List<Season>
     ): ResultWrapper<Boolean> =
-        emit(call = { seasonDao.update(seasonLocalEntityList) }) {
+        emit(call = {
+            val seasonLocalEntityList = SeasonMapper.fromDomainToLocal(seasonList)
+            seasonDao.update(seasonLocalEntityList)
+        }) {
             true
         }
 

@@ -1,12 +1,10 @@
 package com.example.pokemonapp.data.repositories
 
 import com.example.pokemonapp.data.database.PokemonLocalDataSource
-import com.example.pokemonapp.data.mappers.SeasonMapper
 import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.infra.common.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class SeasonRepositoryImpl(
     private val localDataSource: PokemonLocalDataSource,
@@ -14,20 +12,12 @@ class SeasonRepositoryImpl(
 ) : SeasonRepository {
 
     override suspend fun insert(seasonList: List<Season>): ResultWrapper<Boolean> =
-        withContext(dispatcher) {
-            val mapper = SeasonMapper.fromDomainToLocal(seasonList)
-            localDataSource.insertSeasons(mapper)
-        }
+        localDataSource.insertSeasons(seasonList)
 
     override suspend fun update(seasonList: List<Season>): ResultWrapper<Boolean> =
-        withContext(dispatcher) {
-            val mapper = SeasonMapper.fromDomainToLocal(seasonList)
-            localDataSource.updateSeasons(mapper)
-        }
+        localDataSource.updateSeasons(seasonList)
 
     override suspend fun getAll(): ResultWrapper<List<Season>> =
-        withContext(dispatcher) {
-            localDataSource.getAllSeasons()
-        }
+        localDataSource.getAllSeasons()
 
 }

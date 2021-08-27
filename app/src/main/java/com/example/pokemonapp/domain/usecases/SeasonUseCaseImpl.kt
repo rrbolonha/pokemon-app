@@ -3,7 +3,6 @@ package com.example.pokemonapp.domain.usecases
 import com.example.pokemonapp.data.repositories.SeasonRepository
 import com.example.pokemonapp.domain.entities.Season
 import com.example.pokemonapp.domain.entities.SeasonStatusType.ACTIVATED
-import com.example.pokemonapp.domain.entities.SeasonStatusType.SELECTED
 import com.example.pokemonapp.infra.common.ResultWrapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -21,11 +20,7 @@ class SeasonUseCaseImpl(
 
     override suspend fun update(seasonList: List<Season>): ResultWrapper<Boolean> =
         withContext(dispatcher) {
-            seasonList.forEach {
-                if (it.status == SELECTED) {
-                    it.status = ACTIVATED
-                }
-            }
+            //seasonList.forEach { it.status = ACTIVATED }
             repository.update(seasonList)
         }
 

@@ -89,18 +89,12 @@ class SeasonFragment : Fragment() {
     private fun setupDeleteDatabaseObserver() =
         viewModel.isDeletedDatabase.observe(viewLifecycleOwner) {
             Timber.d("deleted database is $it")
-            getSeasons()
+            if (it) getSeasons()
         }
 
-    private fun getSeasons() {
-        Timber.d("get seasons")
-        viewModel.seasons()
-    }
+    private fun getSeasons() = viewModel.seasons()
 
-    private fun deleteDatabase() {
-        Timber.d("delete database")
-        viewModel.deleteDatabase()
-    }
+    private fun deleteDatabase() = viewModel.deleteDatabase()
 
     private fun onNavigateAction() {
         Timber.d("navigate to loading journey")
